@@ -1,1 +1,1 @@
-# KnitChartGenerator
+# SweaterChartGenerator
