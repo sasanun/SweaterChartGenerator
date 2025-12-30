@@ -142,6 +142,7 @@ class Gauge(BaseModel):
         elif self.metric == Metric.CM:
             return 10 / self.vertical
         return 0
+ 
 
 # POSTで受け取るデータを表現するクラス Pydantic Model
 class SweaterDimensions(BaseModel):
@@ -987,7 +988,7 @@ class XLSX():
     
     
 @app.post("/generate_sweater_chart", response_description="generated file")
-async def main(data: SweaterDimensions, is_debug=False):
+async def main(sweaterDimensions: SweaterDimensions, is_debug=False):
     """
     Pydanticモデルで受け取ったデータから生成したファイルを送信する
     
@@ -995,14 +996,14 @@ async def main(data: SweaterDimensions, is_debug=False):
         data (SweaterDimensions): 検証済みの寸法データクラス
     """
 
-    file_path = generate_file(data)
+    file_path = generate_file(sweaterDimensions)
 
     background = BackgroundTasks()
     background.add_task(cleanup_file(file_path))
 
     try:
         # 1. コアロジックを実行し、一時ファイルのパスを取得
-        file_path = generate_file(data)
+        file_path = generate_file(sweaterDimensions)
         
         # 2. FileResponseでファイルをクライアントに送信
         return FileResponse(
