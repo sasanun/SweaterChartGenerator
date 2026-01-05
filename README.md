@@ -1,1 +1,1 @@
-# SweaterChartGenerator
+# NumStitch
